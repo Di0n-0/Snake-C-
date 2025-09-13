@@ -70,11 +70,12 @@ position* gen_apple_pos(){
 
 int main(){
     InitWindow(WIDTH, HEIGHT, "Snake");
-    SetTargetFPS(10);
+    SetTargetFPS(60);
+
+    float last_time = GetTime();
 
     snake_node* head = NULL;
     snake_init(&head);
-
 
     position* apple_pos = gen_apple_pos();
 
@@ -95,7 +96,8 @@ int main(){
                 head_dir = down;
             }
 
-            if(game){
+            if(game && GetTime() - last_time >= 0.1){
+                last_time = GetTime();
                 add_front(&head);
 
                 switch(head_dir){
