@@ -132,7 +132,7 @@ int main(){
                 iter = iter->next;
             }
 
-            if(head->pos.x <= 0 || head->pos.x >= WIDTH/STEP - 1 || head->pos.y <= 0 || head->pos.y >= HEIGHT/STEP - 1) game = false;
+            if(head->pos.x < 0 || head->pos.x > WIDTH/STEP - 1 || head->pos.y < 0 || head->pos.y > HEIGHT/STEP - 1) game = false;
 
             DrawRectangle(apple_pos->x * STEP, apple_pos->y * STEP, STEP, STEP, RED);
 
@@ -146,13 +146,15 @@ int main(){
 
             if(!game){
                 DrawText(TextFormat("SCORE: %i", score), WIDTH/2 - STEP * 5, HEIGHT/2 - STEP * 2, 100, YELLOW);
-                snake_node* iter = head;
-                while(head->next != NULL){
-                    iter = head;
-                    head = head->next;
-                    free(iter);
-                }
                 if(IsKeyDown(KEY_ENTER)){
+                    snake_node* iter = head;
+                    while(head->next != NULL){
+                        iter = head;
+                        head = head->next;
+                        free(iter);
+                    }
+                    free(apple_pos);
+                    apple_pos = gen_apple_pos();
                     free(head);
                     snake_init(&head);
                     head_dir = right;
@@ -161,6 +163,12 @@ int main(){
                 }
             }
         EndDrawing();
+    }
+    snake_node* iter = head;
+    while(head->next != NULL){        
+        iter = head;
+        head = head->next;
+        free(iter);
     }
 
     free(apple_pos);
